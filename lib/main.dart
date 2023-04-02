@@ -7,7 +7,9 @@ void main() => runApp
       title: Text("CMPE 137 Project 1"),
       ),
       body: Center(
-        child: Text("press to start playing ") 
+        child: ElevatedButton(
+          onPressed: () {},
+          child: Text("Click to play")), 
         ),
       )
     )
