@@ -15,8 +15,24 @@ class Home extends StatelessWidget{
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {Navigator.push( context, MaterialPageRoute(builder: (context) => FirstPage() )   );},
           child: Text("Click to play")), 
+        ),
+      );
+  }
+}
+
+class FirstPage extends StatelessWidget{
+  @override
+  Widget build (BuildContext context)
+  {
+    return Scaffold(appBar: AppBar(
+      title: Text("CMPE 137 Project 1"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {},
+          child: Text("On the second page ")), 
         ),
       );
   }
