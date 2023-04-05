@@ -21,7 +21,6 @@ class Home extends StatelessWidget{
       );
   }
 }
-
 class FirstPage extends StatelessWidget{
   @override
   Widget build (BuildContext context)
@@ -36,11 +35,33 @@ class FirstPage extends StatelessWidget{
   // Generate 100 widgets that display their index in the List.
   children: List.generate(9, (index) {
     return Center(
-      child: ElevatedButton(onPressed: () {print(index);}, child: Text("Click to add position ")),
+      child: ElevatedButton(onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => MyWidget()) );}, child: Text("Click to add position ")),
     );
   }),
 ),
       );
+  }
+}
+
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
+
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<MyWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(
+      title: Text("CMPE 137 Project 1"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {},
+          child: Text("Click to play")), 
+        ),
+      );;
   }
 }
 
