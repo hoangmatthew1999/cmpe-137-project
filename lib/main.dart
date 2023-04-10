@@ -53,6 +53,7 @@ class MyWidget extends StatefulWidget {
 class _MyWidgetState extends State<MyWidget> {
   String x_or_o = "";
   List<String> x_or_o_Array = ["", "","","","","","","","",];
+  bool myTurn = true;
 
   @override
   Widget build(BuildContext context) 
@@ -80,8 +81,28 @@ class _MyWidgetState extends State<MyWidget> {
       );
   }
 
-  void buttonPress_(int index){ setState (() {x_or_o_Array[index] = "o";} );}
+  void buttonPress_(int index)
+  { 
+    if(myTurn == true){setState (() {x_or_o_Array[index] = "o";} );}
+    else{setState (() {x_or_o_Array[index] = "x";} );}
+    myTurn = !myTurn;
+  }
+  
 
+
+}
+
+class colorGame extends StatefulWidget{
+    const colorGame({super.key});
+    @override
+  State<colorGame> createState() => _colorGameState();
+}
+class _colorGameState extends State<colorGame>{
+  @override
+  Widget build(BuildContext context){
+    return Scaffold( appBar: AppBar(title: Text("CMPE 137 Project 1")) );
+
+  }
 }
 
 
