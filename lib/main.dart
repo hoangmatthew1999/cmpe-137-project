@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 void main() => runApp
 (
@@ -86,24 +87,96 @@ class _MyWidgetState extends State<MyWidget> {
     if(myTurn == true){setState (() {x_or_o_Array[index] = "o";} );}
     else{setState (() {x_or_o_Array[index] = "x";} );}
     myTurn = !myTurn;
+    checkWin();
   }
-  
+  void checkWin()
+  {
+    if(x_or_o_Array[0] == x_or_o_Array[1] && x_or_o_Array[1] == x_or_o_Array[2]){Navigator.push(context, MaterialPageRoute(builder: (context) => ColorFillGame()) );}
+    else if(x_or_o_Array[3] == x_or_o_Array[4] && x_or_o_Array[4] == x_or_o_Array[5]){print("second row");}
+
+  }
+
 
 
 }
-
-class colorGame extends StatefulWidget{
-    const colorGame({super.key});
-    @override
-  State<colorGame> createState() => _colorGameState();
-}
-class _colorGameState extends State<colorGame>{
+class ColorFillGame extends StatefulWidget {
   @override
-  Widget build(BuildContext context){
-    return Scaffold( appBar: AppBar(title: Text("CMPE 137 Project 1")) );
-
-  }
+  _ColorFillGameState createState() => _ColorFillGameState();
 }
+
+class _ColorFillGameState extends State<ColorFillGame> 
+{
+  Timer? _timer;
+  int _timeElapsed = 0;
+  int _clickCount = 0;
+  double _progress = 0.0;
+  void _startTimer()
+  {
+     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _timeElapsed++;
+        _progress = _clickCount / 100.0;
+      });
+    });
+  }
+  void _handleButtonClick()
+  {
+     setState(() {
+      _clickCount++;
+      _progress = _clickCount / 100.0;
+      if (_clickCount == 100) {
+        _stopTimer();
+      }
+    });
+  }
+  void _stopTimer(){ _timer?.cancel();}
+
+    @override
+  void dispose() {
+    _stopTimer();
+    super.dispose();
+  }
+
+
+   @override
+                Widget build(BuildContext context) 
+                {
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: Text('Color Fill Game'),
+                    ),   body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 300,
+              height: 300,
+              color: Colors.blue.withOpacity(_progress),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _startTimer,
+              child: Text('Start Game'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _handleButtonClick,
+              child: Text('Fill Screen'),
+            ),
+            SizedBox(height: 20),
+            Text('Time elapsed: $_timeElapsed seconds'),
+            SizedBox(height: 10),
+            Text('Score: $_timeElapsed'),
+          ],
+        ),
+      ),);
+                }
+
+}
+
+
+
+
 
 
 
