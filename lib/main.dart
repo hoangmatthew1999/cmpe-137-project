@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'dart:math';
 void main() => runApp
 (
   MaterialApp(
@@ -16,7 +16,7 @@ class Home extends StatelessWidget{
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () {Navigator.push( context, MaterialPageRoute(builder: (context) => FirstPage() )   );},
+          onPressed: () {Navigator.push( context, MaterialPageRoute(builder: (context) => MyWidget() )   );},
           child: Text("Click to play")), 
         ),
       );
@@ -91,8 +91,17 @@ class _MyWidgetState extends State<MyWidget> {
   }
   void checkWin()
   {
-    if(x_or_o_Array[0] == x_or_o_Array[1] && x_or_o_Array[1] == x_or_o_Array[2]){Navigator.push(context, MaterialPageRoute(builder: (context) => ColorFillGame()) );}
-    else if(x_or_o_Array[3] == x_or_o_Array[4] && x_or_o_Array[4] == x_or_o_Array[5]){print("second row");}
+    if(x_or_o_Array[0] == x_or_o_Array[1] && x_or_o_Array[1] == x_or_o_Array[2] && x_or_o_Array[0] != '' && x_or_o_Array[1] != '' && x_or_o_Array[2] != ''){Navigator.push(context, MaterialPageRoute(builder: (context) => ColorFillGame()) );x_or_o_Array = ["", "","","","","","","","",];}//first row across
+    if(x_or_o_Array[3] == x_or_o_Array[4] && x_or_o_Array[4] == x_or_o_Array[5] && x_or_o_Array[4] != ''){Navigator.push(context, MaterialPageRoute(builder: (context) => ColorFillGame()) );x_or_o_Array = ["", "","","","","","","","",];}//second row across
+    if(x_or_o_Array[6] == x_or_o_Array[7] && x_or_o_Array[7] == x_or_o_Array[8] && x_or_o_Array[6] != ''){Navigator.push(context, MaterialPageRoute(builder: (context) => ColorFillGame()) );x_or_o_Array = ["", "","","","","","","","",];}//third row across 
+
+    if(x_or_o_Array[0] == x_or_o_Array[4] && x_or_o_Array[4] == x_or_o_Array[8] && x_or_o_Array[0] != ''){Navigator.push(context, MaterialPageRoute(builder: (context) => ColorFillGame()) );x_or_o_Array = ["", "","","","","","","","",];}//left to right diagonal
+    if(x_or_o_Array[2] == x_or_o_Array[4] && x_or_o_Array[4] == x_or_o_Array[6] && x_or_o_Array[2] != ''){Navigator.push(context, MaterialPageRoute(builder: (context) => ColorFillGame()) );x_or_o_Array = ["", "","","","","","","","",];}//right to left diagonal
+
+    if(x_or_o_Array[0] == x_or_o_Array[3] && x_or_o_Array[3] == x_or_o_Array[6] && x_or_o_Array[0] != ''){Navigator.push(context, MaterialPageRoute(builder: (context) => ColorFillGame()) );x_or_o_Array = ["", "","","","","","","","",];}//first row across
+    if(x_or_o_Array[1] == x_or_o_Array[4] && x_or_o_Array[4] == x_or_o_Array[7] && x_or_o_Array[1] != ''){Navigator.push(context, MaterialPageRoute(builder: (context) => ColorFillGame()) );x_or_o_Array = ["", "","","","","","","","",];}//first row across
+    if(x_or_o_Array[2] == x_or_o_Array[5] && x_or_o_Array[5] == x_or_o_Array[8] && x_or_o_Array[2] != ''){Navigator.push(context, MaterialPageRoute(builder: (context) => ColorFillGame()) );x_or_o_Array = ["", "","","","","","","","",];}//first row across
+
 
   }
 
@@ -128,6 +137,7 @@ class _ColorFillGameState extends State<ColorFillGame>
         _stopTimer();
       }
     });
+    Navigator.push(context, MaterialPageRoute(builder: (context) => gameTwo()) );
   }
   void _stopTimer(){ _timer?.cancel();}
 
@@ -171,8 +181,125 @@ class _ColorFillGameState extends State<ColorFillGame>
         ),
       ),);
                 }
+}
+
+class gameTwo extends StatefulWidget{
+  const gameTwo({super.key});
+  @override
+  State<gameTwo> createState() =>_gameTwoState();
 
 }
+
+class _gameTwoState extends State<gameTwo> {
+  Color _currentColor = Colors.grey;
+
+  Random rand = Random();
+  var side1;
+  var side2;
+  String _ColorName='';
+  int _points=0;
+
+
+  Color red= Color.fromRGBO(255, 0, 0, 1.0);
+  Color blue= Color.fromRGBO(0, 0, 255, 1.0);
+  Color green= Color.fromRGBO(0, 255, 0, 1.0);
+
+
+  Color _genRandColor()
+  {
+    var Colorarr = [red,blue,green];
+    side1 = rand.nextInt(3);
+    return Colorarr[side1];
+  }
+
+  String _genColorName()
+  {
+    String colorName ='';
+    var Namearr =['Red','Blue','Green'];
+    side2 = rand.nextInt(3);
+    return colorName=Namearr[side2];
+  }
+
+  void handleLeftButtonPress() {
+    // add your logic here for when the left button is pressed
+    setState(()
+    {
+      if(side1!=side2)
+      {
+        _points++;
+      }
+      if (_points ==10){Navigator.push( context, MaterialPageRoute(builder: (context) => Home() )   );}
+      _currentColor = _genRandColor();
+      _ColorName = _genColorName();
+    });
+  }
+
+  void handleRightButtonPress() {
+    setState(() {
+      if(side1==side2)
+      {
+        _points++;
+      }
+      if (_points ==10){Navigator.push( context, MaterialPageRoute(builder: (context) => Home() )   );}
+      _currentColor = _genRandColor();
+      _ColorName = _genColorName();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned
+          (
+          top: 20,
+          left: 20,
+          child: Text(
+              '$_points',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        ),
+        Positioned(
+          bottom: 20,
+          left: 20,
+          right: 20,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: handleLeftButtonPress,
+                child: Text('No'),
+              ),
+              ElevatedButton(
+                onPressed: handleRightButtonPress,
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+        ),
+        Center(
+          child: Container(
+              width: 200,
+              height: 200,
+              color: _currentColor,
+              child:  Center(
+                child: Text(
+                  _ColorName,
+                  style: TextStyle(
+                    fontSize: 40,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+
 
 
 
